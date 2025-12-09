@@ -11,11 +11,19 @@
     <!-- Main scene definition -->
     <a-scene id="scene">
     <script src="constants.js"></script>  
+    <script src="boxSpin.js"></script>
     <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
     <a-entity id="box" 
             geometry="primitive:box"
             position="0 3 -5"
             material="color: blue; src: https://raw.githubusercontent.com/cherryW29/period-5/refs/heads/asset/brickPattern.jpg">
+    <a-entity box-spin
+            id="box" 
+            geometry="primitive:box"
+            position="0 3 -5"
+            material="color:blue;
+                      src: {Your-URL}">
+    </a-entity>
     <a-entity light="type:ambient; color: white;"
               location="0 0 0">
     </a-entity>
