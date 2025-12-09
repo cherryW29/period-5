@@ -1,1 +1,1 @@
-const BOX_SPEED = 1
+export const BOX_SPEED = 1
