@@ -23,11 +23,11 @@ AFRAME.registerComponent('collide', {
    let oldPosition = box.getAttribute('position');
    console.log('Old box position:', oldPosition);
    
-   let position = {
-     x: Math.random() * 10 * ((Math.random() < 0.5) ? -1 : 1),
-     y: Math.random() * 9 + 1,
-     z: -(Math.random() * 8 + 2)
-   };
+let position = {
+  x: Math.random() * 10 * ((Math.random() < 0.5) ? -1 : 1),
+  y: Math.random() * 9 + 1,
+  z: -(Math.random() * 7 + 5)   // ‑5 … ‑12  (closer spawns only)
+};
    
    box.setAttribute('position', position);
    console.log('New box position:', position);
