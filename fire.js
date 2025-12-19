@@ -38,10 +38,13 @@ AFRAME.registerComponent('fire', {
      let distanceTraveled = Math.abs(pos.z + 1); // +1 because it starts at z=-1
      
      if (distanceTraveled > this.data.boxDistance + TORPEDO_MARGIN) {
-       this.el.setAttribute('visible', false);
+       //this.el.setAttribute('visible', false);
      } else {
        pos.z += -timeDelta * TORPEDO_SPEED / 1000.0;
        this.el.setAttribute('position', pos);
+
+this.el.setObject3D('mesh', null);          // hide geometry
+this.el.removeAttribute('geometry');        // hide geometry
      }
    }
  },
