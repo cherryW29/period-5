@@ -1,32 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Hello, WebVR! - A-Frame Now is the time</title>
-    <meta name="description" content="Hello, WebVR! - A-Frame">
+  <head> 
+    <meta charset="utf-8">
+    <title>Shooting Gallery</title>
+    <meta name="description" content="CTE Shooting Gallery">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   </head>
   <body>
-    <a-scene>
-      <a-box position="1 0.5 -3"
-             rotation="0 45 0"
-             color="#4CC3D9"></a-box>
 
-      <a-sphere position="0 1.25 -5"
-                radius="1.25"
-                color="#EF2D5E"></a-sphere>
+    <!-- Main scene definition -->
+    <a-scene id="scene">
+      <script src="fire.js"></script>
+      <script src="clickOnBox.js"></script>
+      <script src="lookingAtBox.js"></script>
+      <script src="notLookingAtBox.js"></script>
+      <script src="boxSpin.js"></script>
+      <script src="constants.js"></script>
+      <script src="collide.js"></script>
+      <script src="https://unpkg.com/aframe-aabb-collider-component/dist/aframe-aabb-collider-component.min.js"></script>
+      <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+      <a-entity environment="preset:starry"></a-entity>
+      <a-entity box-spin looking-at-box not-looking-at-box
+            id="box" 
+            geometry="primitive:box"
+            position="0 3 -5"
+            class = "clickable detect-collide"
+            material="color: blue; src: https://raw.githubusercontent.com/Leo-P78/VR-Shooter-Prunty-Peng/refs/heads/main/assets/brickPattern.jpg">
+      </a-entity>
 
-      <a-cylinder position="1 0.75 -3"
-                  radius="0.5"
-                  height="1.5"
-                  color="#FFC65D"></a-cylinder>
-
-      <a-plane position="0 0 -4"
-               rotation="-90 0 0"
-               width="4"
-               height="4"
-               color="#7BC8A4"></a-plane>
-      <a-sky color="#ECECEC"></a-sky>
+      <a-entity light = "type:ambient ;color:white;"
+        location = "0 0 -1"></a-entity>
+      <a-entity camera
+                look-controls
+                id="camera"
+                position="0 1.5 0"
+                rotation="0 0 0">
+        
+        <a-entity raycaster="objects: .clickable">
+        </a-entity>
+        <a-entity cursor click-on-box
+                  position="0 0 -1.5"
+                  geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.015"
+                  material="color: red; shader: flat">
+        </a-entity>
+        <a-entity fire collide
+          id="torpedo"
+          geometry="primitive:sphere; radius: 0.1"
+          material="color: white"
+          visible="false"
+          position="0 0 -1"
+          aabb-collider="objects: .detect-collide">
+        </a-entity>
+      </a-entity>
+      <a-sound src="https://github.com/Leo-P78/VR-Shooter-Prunty-Peng/blob/f4a31b0eee1e6d3b9c5ac97a06a74e30730c76ca/music.wav" autoplay="true" loop="true" position = "0 0 0"></a-sound>
     </a-scene>
+    
   </body>
 </html>
-
