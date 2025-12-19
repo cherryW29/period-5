@@ -8,20 +8,21 @@
   </head>
   <body>
 
-    <script src="soundUnlock.js"></script>
     <!-- Main scene definition -->
     <a-scene id="scene">
-      <a-scene sound-unlock>
-        ...
-        <a-sound src="https://your.cdn.url/desert-loop.mp3" autoplay="true" loop="true" volume="0.5"></a-sound>
-      </a-scene>
-      <!-- background ambience -->
       <a-sound 
         src="https://drive.google.com/file/d/1RX5P4UjLn9_4GNbSWl_vI9gTCrRl2Poj/view?usp=sharing"
         autoplay="true"
         loop="true"
         volume="0.5">
       </a-sound>
+      <!-- scoreboard -->
+<a-text id="scoreText"
+        value="Score: 0"
+        position="-1.8 1.8 -3"
+        scale="1.5 1.5 1.5"
+        color="#FFF"
+        font="kelsonsans"></a-text>
       <script src="fire.js"></script>
       <script src="clickOnBox.js"></script>
       <script src="lookingAtBox.js"></script>
