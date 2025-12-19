@@ -26,7 +26,7 @@ AFRAME.registerComponent('collide', {
 let position = {
   x: Math.random() * 10 * ((Math.random() < 0.5) ? -1 : 1),
   y: Math.random() * 9 + 1,
-  z: -(Math.random() * 7 + 5)   // ‑5 … ‑12  (closer spawns only)
+  z: -(Math.random() * 5 + 3)   // ‑3 … ‑8   
 };
    
    box.setAttribute('position', position);
