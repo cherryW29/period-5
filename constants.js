@@ -4,3 +4,4 @@ const BOX_SELECTED_COLOR = 'yellow';
 const TORPEDO_SPEED = 2;
 const TORPEDO_MARGIN = 4;
 const SCORE_PER_HIT = 10;
+const HIGH_SCORE_KEY = 'sgHighScores';
