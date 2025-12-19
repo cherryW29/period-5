@@ -16,6 +16,8 @@ AFRAME.registerComponent('fire', {
      if (!this.camera) {
        this.camera = document.getElementById('camera');
      }
+     this.el.setAttribute('position', {x: 0, y: 0, z: -1}); // start from camera
+     this.el.setAttribute('visible', true);
      
      let cameraPos = this.camera.getAttribute('position');
      let boxPos = event.detail.boxPosition;
