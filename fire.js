@@ -43,8 +43,12 @@ AFRAME.registerComponent('fire', {
        pos.z += -timeDelta * TORPEDO_SPEED / 1000.0;
        this.el.setAttribute('position', pos);
 
+// NEW – keeps collider alive, just makes it invisible
 this.el.setObject3D('mesh', null);          // hide geometry
 this.el.removeAttribute('geometry');        // hide geometry
+      // inside fire()
+this.el.setAttribute('geometry', 'primitive:sphere; radius:0.5');
+this.el.setObject3D('mesh', null);          // force refresh
      }
    }
  },
