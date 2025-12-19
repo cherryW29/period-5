@@ -39,6 +39,14 @@ AFRAME.registerComponent('collide', {
 let text = document.querySelector('#scoreText');
 let newScore = parseInt(text.getAttribute('value').split(' ')[1]) + SCORE_PER_HIT;
 text.setAttribute('value', 'Score: ' + newScore);
+  // read old highs
+let highs = JSON.parse(localStorage.getItem(HIGH_SCORE_KEY) || '[]');
+highs.push(newScore);
+highs.sort((a,b)=>b-a);
+highs = highs.slice(0,3);
+localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highs));
+// show best
+document.querySelector('#highText').setAttribute('value', 'Best: ' + highs[0]);
  },
 
 });
