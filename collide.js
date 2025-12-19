@@ -35,6 +35,10 @@ AFRAME.registerComponent('collide', {
    this.el.setAttribute('position', {x: 0, y: 0, z: -1});
    this.el.setAttribute('visible', false);
    console.log('Torpedo reset and hidden');
+  // update score
+let text = document.querySelector('#scoreText');
+let newScore = parseInt(text.getAttribute('value').split(' ')[1]) + SCORE_PER_HIT;
+text.setAttribute('value', 'Score: ' + newScore);
  },
 
 });
