@@ -61,14 +61,13 @@
                   geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.015"
                   material="color: red; shader: flat">
         </a-entity>
-        <a-entity fire collide
+      <a-entity fire collide
           id="torpedo"
-          geometry="primitive:sphere; radius: 0.1"
-          material="color: white"
-          visible="false"
+          geometry="primitive:sphere; radius:0.1"
+          material="color:white; opacity:0"
           position="0 0 -1"
-          aabb-collider="objects: .detect-collide">
-        </a-entity>
+          aabb-collider="objects:.detect-collide">
+      </a-entity>
       </a-entity>
       <a-sound src="https://github.com/Leo-P78/VR-Shooter-Prunty-Peng/blob/f4a31b0eee1e6d3b9c5ac97a06a74e30730c76ca/music.wav" autoplay="true" loop="true" position = "0 0 0"></a-sound>
     </a-scene>
