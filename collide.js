@@ -1,53 +1,41 @@
 /* global AFRAME, TORPEDO_SPEED, TORPEDO_MARGIN */
 
-AFRAME.registerComponent('collide', {
+AFRAME.registerComponent('fire', {
+  schema: { boxDistance: {type: 'number'} },
 
- schema: {
-   boxDistance: {type: 'number'}
- },
+  init: function () {
+    this.el.addEventListener('fire', this.fire.bind(this));
+    this.camera = document.getElementById('camera');
+  },
 
- init: function () {
-   this.el.addEventListener('hitstart', this.collide.bind(this));
-   this.el.addEventListener('hitend', function() {
-     console.log('Collision ended');
-   });
-   console.log('Collide component initialized');
- },
+  fire: function (evt) {
+    // only fire if torpedo is NOT already flying (opacity check)
+    if (this.el.getAttribute('material').opacity > 0) return;
 
- collide: function() {
-   console.log('COLLISION DETECTED!');
-   console.log('Torpedo position:', this.el.getAttribute('position'));
-   console.log('Torpedo world position:', this.el.object3D.getWorldPosition(new THREE.Vector3()));
-   
-   let box = document.getElementById('box');
-   let oldPosition = box.getAttribute('position');
-   console.log('Old box position:', oldPosition);
-   
-let position = {
-  x: Math.random() * 6  - 3,   // ‑3 … 3   (was ‑10 … 10)
-  y: Math.random() * 3  + 1,   //  1 … 4   (was  1 … 10)
-  z: -(Math.random() * 3 + 2)  // ‑2 … 5   (close zone)
-};  
+    const camPos = this.camera.getAttribute('position');
+    const boxPos  = evt.detail.boxPosition;
+    this.data.boxDistance = this.getDistance(camPos, boxPos);
 
-   
-   box.setAttribute('position', position);
-   console.log('New box position:', position);
-   
-   this.el.setAttribute('position', {x: 0, y: 0, z: -1});
-   this.el.setAttribute('visible', false);
-   console.log('Torpedo reset and hidden');
-  // update score
-let text = document.querySelector('#scoreText');
-let newScore = parseInt(text.getAttribute('value').split(' ')[1]) + SCORE_PER_HIT;
-text.setAttribute('value', 'Score: ' + newScore);
-  // read old highs
-let highs = JSON.parse(localStorage.getItem(HIGH_SCORE_KEY) || '[]');
-highs.push(newScore);
-highs.sort((a,b)=>b-a);
-highs = highs.slice(0,3);
-localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(highs));
-// show best
-document.querySelector('#highText').setAttribute('value', 'Best: ' + highs[0]);
- },
+    this.el.setAttribute('position', {x: 0, y: 0, z: -1});
+    this.el.setAttribute('material', 'opacity', 1);   // show
+  },
 
+  tick: function (t, dt) {
+    if (this.el.getAttribute('material').opacity === 0) return;
+
+    let p = this.el.getAttribute('position');
+    p.z -= (dt * TORPEDO_SPEED) / 1000;
+
+    const travelled = Math.abs(p.z + 1);
+    if (travelled > this.data.boxDistance + TORPEDO_MARGIN) {
+      this.el.setAttribute('material', 'opacity', 0);   // hide, collider stays
+      return;
+    }
+    this.el.setAttribute('position', p);
+  },
+
+  getDistance: function (a, b) {
+    const dx = b.x - a.x, dy = b.y - a.y, dz = b.z - a.z;
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+  }
 });
