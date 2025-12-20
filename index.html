@@ -61,12 +61,11 @@
                   geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.015"
                   material="color: red; shader: flat">
         </a-entity>
-        <a-entity fire collide
-              id="torpedo"
-              geometry="primitive:sphere; radius:0.1"
-              material="color:white; opacity:100"
-              position="0 0 -1"
-              aabb-collider="objects:.detect-collide">
+        <a-entity  fire collide id="torpedo"
+          geometry="primitive:sphere; radius:0.1"
+          material="color:white; opacity:0"   <!-- 0 = hidden, 1 = shown -->
+          position="0 0 -1"
+          aabb-collider="objects:.detect-collide">
         </a-entity>
       </a-entity>
       <a-sound src="https://drive.google.com/file/d/1RX5P4UjLn9_4GNbSWl_vI9gTCrRl2Poj/view?usp=sharing" autoplay="true" loop="true" position = "0 0 0"></a-sound>
