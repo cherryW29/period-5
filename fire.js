@@ -9,29 +9,26 @@ AFRAME.registerComponent('fire', {
   },
 
   fire: function (evt) {
-    // only fire if torpedo is not already visible
-    if (this.el.getAttribute('visible')) return;
+    // already flying?  (opacity check)
+    if (this.el.getAttribute('material').opacity > 0) return;
 
-    // compute distance camera → box
     const camPos = this.camera.getAttribute('position');
     const boxPos = evt.detail.boxPosition;
     this.data.boxDistance = this.getDistance(camPos, boxPos);
 
-    // arm torpedo
     this.el.setAttribute('position', {x: 0, y: 0, z: -1});
-    this.el.setAttribute('visible', true);
+    this.el.setAttribute('material', 'opacity', 1);   // show
   },
 
   tick: function (t, dt) {
-    if (!this.el.getAttribute('visible')) return;
+    if (this.el.getAttribute('material').opacity === 0) return;
 
     let p = this.el.getAttribute('position');
     p.z -= (dt * TORPEDO_SPEED) / 1000;
 
-    const travelled = Math.abs(p.z + 1);          // distance from start
+    const travelled = Math.abs(p.z + 1);
     if (travelled > this.data.boxDistance + TORPEDO_MARGIN) {
-      // ----- hide only when past the target -----
-      this.el.setAttribute('visible', false);
+      this.el.setAttribute('material', 'opacity', 0);   // hide, collider stays
       return;
     }
     this.el.setAttribute('position', p);
