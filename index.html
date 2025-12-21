@@ -4,18 +4,27 @@
     <meta charset="utf-8">
     <title>Shooting Gallery</title>
     <meta name="description" content="CTE Shooting Gallery">
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="constants.js"></script>
+    <script src="fire.js"></script>
+    <script src="clickOnBox.js"></script>
+    <script src="lookingAtBox.js"></script>
+    <script src="notLookingAtBox.js"></script>
+    <script src="boxSpin.js"></script>
+    <script src="collide.js"></script>
+    <script src="https://unpkg.com/aframe-aabb-collider-component/dist/aframe-aabb-collider-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
   </head>
   <body>
 
     <!-- Main scene definition -->
     <a-scene id="scene">
-      <a-sound 
-        src="https://drive.google.com/file/d/1RX5P4UjLn9_4GNbSWl_vI9gTCrRl2Poj/view?usp=sharing"
-        autoplay="true"
-        loop="true"
-        volume="0.5">
-      </a-sound>
+      <a-assets>
+        <audio id="music" src="egypt-egyptian-desert-music-263086.mp3" preload="auto"></audio>
+      </a-assets>
+      
+      <!-- Background Music - will start after user interaction -->
+      <a-entity id="backgroundMusic" sound="src: #music; loop: true; autoplay: false"></a-entity>
       <!-- scoreboard -->
       <a-text id="scoreText"
         value="Score: 0"
@@ -28,15 +37,7 @@
         position="-1.8 1.5 -3"
         scale="1 1 1"
         color="#FFD"></a-text>
-      <script src="fire.js"></script>
-      <script src="clickOnBox.js"></script>
-      <script src="lookingAtBox.js"></script>
-      <script src="notLookingAtBox.js"></script>
-      <script src="boxSpin.js"></script>
-      <script src="constants.js"></script>
-      <script src="collide.js"></script>
-      <script src="https://unpkg.com/aframe-aabb-collider-component/dist/aframe-aabb-collider-component.min.js"></script>
-      <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+      <!-- Environment preset -->
       <a-entity environment="preset:egypt"></a-entity>
       <a-entity box-spin looking-at-box not-looking-at-box
             id="box" 
@@ -61,15 +62,79 @@
                   geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.015"
                   material="color: red; shader: flat">
         </a-entity>
-        <a-entity  fire collide id="torpedo"
-          geometry="primitive:sphere; radius:0.1"
-          material="color:white; opacity:0"   <!-- 0 = hidden, 1 = shown -->
-          position="0 0 -1"
-          aabb-collider="objects:.detect-collide">
+        <a-entity fire collide
+              id="torpedo"
+              geometry="primitive:sphere; radius:0.2"
+              material="color:white; opacity:1"
+              position="0 0 -1"
+              visible="false"
+              aabb-collider="objects: .detect-collide; watch: true">
         </a-entity>
       </a-entity>
-      <a-sound src="https://drive.google.com/file/d/1RX5P4UjLn9_4GNbSWl_vI9gTCrRl2Poj/view?usp=sharing" autoplay="true" loop="true" position = "0 0 0"></a-sound>
     </a-scene>
+    
+    <script>
+      // Start music after user interaction (required by browser autoplay policy)
+      let musicStarted = false;
+      function startMusic() {
+        if (!musicStarted) {
+          musicStarted = true;
+          let musicEntity = document.getElementById('backgroundMusic');
+          let scene = document.querySelector('a-scene');
+          
+          if (musicEntity && scene) {
+            // Resume AudioContext if suspended
+            function playMusic() {
+              if (musicEntity.components && musicEntity.components.sound) {
+                let soundComponent = musicEntity.components.sound;
+                if (typeof soundComponent.playSound === 'function') {
+                  soundComponent.playSound();
+                } else {
+                  musicEntity.setAttribute('sound', 'autoplay', true);
+                }
+              } else {
+                setTimeout(function() {
+                  if (musicEntity.components && musicEntity.components.sound) {
+                    musicEntity.setAttribute('sound', 'autoplay', true);
+                  }
+                }, 100);
+              }
+            }
+            
+            if (scene.audioContext) {
+              if (scene.audioContext.state === 'suspended') {
+                scene.audioContext.resume().then(playMusic).catch(playMusic);
+              } else {
+                playMusic();
+              }
+            } else {
+              setTimeout(function() {
+                if (scene.audioContext && scene.audioContext.state === 'suspended') {
+                  scene.audioContext.resume().then(playMusic).catch(playMusic);
+                } else {
+                  playMusic();
+                }
+              }, 100);
+            }
+          }
+        }
+      }
+      
+      // Listen for user interactions
+      let scene = document.querySelector('a-scene');
+      function setupMusicListeners() {
+        document.addEventListener('click', startMusic, {once: true});
+        document.addEventListener('mousedown', startMusic, {once: true});
+        document.addEventListener('touchstart', startMusic, {once: true});
+        document.addEventListener('keydown', startMusic, {once: true});
+      }
+      
+      if (scene.hasLoaded) {
+        setupMusicListeners();
+      } else {
+        scene.addEventListener('loaded', setupMusicListeners);
+      }
+    </script>
     
   </body>
 </html>
